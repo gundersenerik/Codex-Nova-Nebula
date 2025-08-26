@@ -1,0 +1,607 @@
+/* ============================================================================
+   CODEX NOVA NEBULA - Animations
+   Modern animations including the special "rocket" micro-animation
+   ============================================================================ */
+
+/* ============================================================================
+   ENTRANCE ANIMATIONS
+   ============================================================================ */
+
+/* Fade Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide Animations */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Scale Animations */
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   SPECIAL ROCKET ANIMATION (For Generate Button)
+   ============================================================================ */
+
+@keyframes rocket {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    15% {
+        transform: translateY(-3px) rotate(-5deg) scale(1.05);
+    }
+    30% {
+        transform: translateY(-5px) rotate(3deg) scale(1.1);
+    }
+    45% {
+        transform: translateY(-7px) rotate(-3deg) scale(1.05);
+    }
+    60% {
+        transform: translateY(-5px) rotate(2deg) scale(1);
+    }
+    75% {
+        transform: translateY(-3px) rotate(-1deg) scale(1);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+}
+
+.generate-btn:active::after,
+#generate-promocode-btn:active::after {
+    content: '🚀';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    animation: rocket 0.8s var(--ease-spring);
+    pointer-events: none;
+}
+
+/* Rocket Trail Effect */
+@keyframes rocketTrail {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scaleY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(10px) scaleY(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px) scaleY(0.5);
+    }
+}
+
+/* ============================================================================
+   LOADING ANIMATIONS
+   ============================================================================ */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+}
+
+.loading-spinner::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+    border-radius: 50%;
+    border: 3px solid var(--glass-border);
+    border-color: var(--primary) transparent var(--primary) transparent;
+    animation: spin 1.2s linear infinite;
+}
+
+/* Loading Dots */
+.loading-dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0; }
+
+/* ============================================================================
+   SHIMMER EFFECTS
+   ============================================================================ */
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 20%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.2) 80%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ============================================================================
+   GLOW ANIMATIONS
+   ============================================================================ */
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--primary-glow),
+                    0 0 10px var(--primary-glow),
+                    0 0 15px var(--primary-glow);
+    }
+    50% {
+        box-shadow: 0 0 10px var(--primary-glow),
+                    0 0 20px var(--primary-glow),
+                    0 0 30px var(--primary-glow);
+    }
+}
+
+@keyframes textGlow {
+    0%, 100% {
+        text-shadow: 0 0 5px var(--primary-glow),
+                     0 0 10px var(--primary-glow);
+    }
+    50% {
+        text-shadow: 0 0 10px var(--primary-glow),
+                     0 0 20px var(--primary-glow),
+                     0 0 30px var(--primary-glow);
+    }
+}
+
+/* ============================================================================
+   WAVE ANIMATIONS
+   ============================================================================ */
+
+@keyframes wave {
+    0% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(14deg);
+    }
+    20% {
+        transform: rotate(-8deg);
+    }
+    30% {
+        transform: rotate(14deg);
+    }
+    40% {
+        transform: rotate(-4deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* ============================================================================
+   SUCCESS ANIMATIONS
+   ============================================================================ */
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes success {
+    0% {
+        transform: scale(0) rotate(45deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(45deg);
+    }
+    100% {
+        transform: scale(1) rotate(45deg);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   ERROR ANIMATIONS
+   ============================================================================ */
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes error {
+    0% {
+        transform: scale(0) rotate(45deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(45deg);
+    }
+    100% {
+        transform: scale(1) rotate(45deg);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   NOTIFICATION ANIMATIONS
+   ============================================================================ */
+
+@keyframes notificationSlide {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notificationBounce {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(10px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================================
+   COPY TO CLIPBOARD ANIMATION
+   ============================================================================ */
+
+@keyframes copySuccess {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+        background: var(--success);
+    }
+    100% {
+        transform: scale(1);
+        background: var(--gradient-1);
+    }
+}
+
+.copy-animation {
+    animation: copySuccess 0.3s ease-in-out;
+}
+
+/* ============================================================================
+   FORM VALIDATION ANIMATIONS
+   ============================================================================ */
+
+@keyframes invalidInput {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+.invalid-shake {
+    animation: invalidInput 0.5s ease-in-out;
+    border-color: var(--danger) !important;
+}
+
+/* ============================================================================
+   MODAL ANIMATIONS
+   ============================================================================ */
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modalOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+}
+
+@keyframes overlayIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   CARD HOVER ANIMATIONS
+   ============================================================================ */
+
+@keyframes cardLift {
+    from {
+        transform: translateY(0);
+        box-shadow: var(--shadow-md);
+    }
+    to {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-2xl);
+    }
+}
+
+/* ============================================================================
+   TEXT ANIMATIONS
+   ============================================================================ */
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+.typing-effect {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end);
+}
+
+.cursor {
+    animation: blink 1s infinite;
+}
+
+/* ============================================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================================ */
+
+.animate-fadeIn { animation: fadeIn var(--transition-base); }
+.animate-fadeInUp { animation: fadeInUp var(--transition-base); }
+.animate-fadeInDown { animation: fadeInDown var(--transition-base); }
+.animate-slideDown { animation: slideDown var(--transition-base); }
+.animate-slideUp { animation: slideUp var(--transition-base); }
+.animate-scaleIn { animation: scaleIn var(--transition-base); }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-bounce { animation: bounce 1s infinite; }
+.animate-shake { animation: shake 0.5s; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* Animation Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Animation Duration */
+.duration-100 { animation-duration: 100ms; }
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.duration-500 { animation-duration: 500ms; }
+.duration-700 { animation-duration: 700ms; }
+.duration-1000 { animation-duration: 1000ms; }

@@ -1,0 +1,449 @@
+/* ============================================================================
+   CODEX NOVA NEBULA - Braze Naming Specific Styles
+   Styles for Braze Campaigns, Segments, and Canvases naming tool
+   ============================================================================ */
+
+/* ============================================================================
+   BRAZE CONTAINER
+   ============================================================================ */
+
+.braze-section {
+    padding: var(--space-2xl) 0;
+    min-height: calc(100vh - var(--header-height));
+}
+
+.braze-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+}
+
+/* Beta Badge */
+.beta-banner {
+    background: var(--gradient-2);
+    color: var(--white);
+    text-align: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-xl);
+    font-weight: var(--font-medium);
+    box-shadow: var(--shadow-lg);
+}
+
+.beta-banner .beta-icon {
+    display: inline-block;
+    margin-right: var(--space-sm);
+    animation: pulse 2s infinite;
+}
+
+/* ============================================================================
+   BRAZE NAMING FORM
+   ============================================================================ */
+
+.braze-form {
+    background: var(--glass-white);
+    backdrop-filter: var(--blur-md);
+    -webkit-backdrop-filter: var(--blur-md);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+}
+
+/* Object Type Selector */
+.object-type-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-md);
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, 
+        rgba(243, 147, 251, 0.05) 0%, 
+        rgba(245, 87, 108, 0.05) 100%);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.object-type-card {
+    background: var(--glass-light);
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.object-type-card:hover {
+    background: var(--glass-medium);
+    transform: translateY(-2px);
+}
+
+.object-type-card.selected {
+    background: var(--gradient-2);
+    border-color: var(--secondary);
+    transform: scale(1.05);
+}
+
+.object-type-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-white);
+    border-radius: var(--radius-full);
+    color: var(--secondary);
+}
+
+.object-type-card.selected .object-type-icon {
+    background: var(--white);
+    color: var(--secondary-dark);
+}
+
+.object-type-label {
+    font-weight: var(--font-semibold);
+    color: var(--white);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.object-type-code {
+    font-family: var(--font-mono);
+    color: var(--gray-400);
+    font-size: var(--text-xs);
+    margin-top: var(--space-xs);
+}
+
+/* Code Class Selector */
+.code-class-section {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.code-class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.code-class-item {
+    background: var(--glass-light);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.code-class-item:hover {
+    background: var(--glass-medium);
+    border-color: var(--secondary-light);
+}
+
+.code-class-item.selected {
+    background: linear-gradient(135deg, 
+        rgba(243, 147, 251, 0.15) 0%, 
+        rgba(245, 87, 108, 0.15) 100%);
+    border-color: var(--secondary);
+}
+
+.code-class-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.code-class-number {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--secondary);
+}
+
+.code-class-name {
+    color: var(--white);
+    font-weight: var(--font-medium);
+    font-size: var(--text-sm);
+}
+
+.code-class-description {
+    color: var(--gray-400);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+}
+
+/* Brand and Communication Type */
+.naming-fields {
+    padding: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+}
+
+.braze-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.braze-form-group label {
+    color: var(--white);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+}
+
+.braze-select,
+.braze-input {
+    padding: var(--space-md) var(--space-lg);
+    background: var(--glass-light);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+}
+
+.braze-select:focus,
+.braze-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    background: var(--glass-medium);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+}
+
+/* Communication Type Tags */
+.comm-type-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.comm-type-tag {
+    padding: var(--space-xs) var(--space-md);
+    background: var(--glass-light);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.comm-type-tag:hover {
+    background: var(--glass-medium);
+    border-color: var(--secondary-light);
+}
+
+.comm-type-tag.selected {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--white);
+}
+
+/* Optional Fields Section */
+.optional-fields {
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.03) 0%, 
+        transparent 100%);
+    border-top: 1px solid var(--glass-border);
+}
+
+.optional-fields-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    color: var(--gray-400);
+    font-size: var(--text-sm);
+}
+
+/* Description & Flags Inputs */
+.description-input,
+.flags-input {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--glass-light);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+}
+
+.description-input::placeholder,
+.flags-input::placeholder {
+    color: var(--gray-500);
+    font-family: var(--font-sans);
+}
+
+/* ============================================================================
+   BRAZE NAMING PREVIEW
+   ============================================================================ */
+
+.naming-preview {
+    padding: var(--space-xl);
+    background: var(--glass-light);
+    border-top: 1px solid var(--glass-border);
+}
+
+.preview-label {
+    color: var(--gray-400);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+}
+
+.preview-result {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xl);
+    color: var(--white);
+    padding: var(--space-lg);
+    background: var(--glass-white);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-segment {
+    padding: 0 var(--space-xs);
+}
+
+.preview-segment.obj { color: var(--primary-light); }
+.preview-segment.code { color: var(--secondary-light); }
+.preview-segment.brand { color: var(--accent-light); }
+.preview-segment.comm-type { color: var(--warning-light); }
+.preview-segment.description { color: var(--success-light); }
+.preview-segment.flags { color: var(--danger-light); }
+
+.preview-separator {
+    color: var(--gray-500);
+    margin: 0 2px;
+}
+
+/* ============================================================================
+   BRAZE GENERATE BUTTON
+   ============================================================================ */
+
+.braze-generate-section {
+    padding: var(--space-2xl);
+    background: var(--gradient-2);
+    display: flex;
+    justify-content: center;
+}
+
+.braze-generate-btn {
+    padding: var(--space-lg) var(--space-3xl);
+    background: var(--white);
+    color: var(--secondary-dark);
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.braze-generate-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-2xl);
+}
+
+.braze-generate-btn:active {
+    transform: translateY(-1px);
+}
+
+/* ============================================================================
+   BRAZE RESULT DISPLAY
+   ============================================================================ */
+
+.braze-result {
+    margin-top: var(--space-2xl);
+    animation: fadeInUp var(--transition-slow);
+}
+
+.braze-result-card {
+    background: var(--gradient-2);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.braze-result-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--white);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    word-break: break-all;
+}
+
+.braze-result-details {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.braze-result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.braze-result-item:last-child {
+    border-bottom: none;
+}
+
+.braze-result-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: var(--text-sm);
+}
+
+.braze-result-value {
+    color: var(--white);
+    font-weight: var(--font-semibold);
+}
+
+/* ============================================================================
+   BRAZE VALIDATION
+   ============================================================================ */
+
+.braze-validation {
+    margin-top: var(--space-3xl);
+}
+
+.braze-validation-input {
+    width: 100%;
+    padding: var(--space-lg);
+    background: var(--glass-light);
+    border: 2px dashed var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.braze-validation-input:focus {
+    border-color: var(--secondary);
+    border-style: solid;
+    background: var(--glass-medium);
+}
