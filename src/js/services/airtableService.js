@@ -209,25 +209,50 @@ class AirtableService {
     /**
      * Fetch all brands
      */
-    async fetchBrands() {
-        try {
-            const records = await this.fetchData(Config.AIRTABLE.TABLES.BRANDS, {
-                sort: [{ field: Config.AIRTABLE.FIELDS.BRANDS.BRAND_NAME, direction: 'asc' }]
-            });
-            
-            return records.map(record => ({
-                id: record.id,
-                code: record.fields[Config.AIRTABLE.FIELDS.BRANDS.BRAND_CODE],
-                name: record.fields[Config.AIRTABLE.FIELDS.BRANDS.BRAND_NAME],
-                country: record.fields[Config.AIRTABLE.FIELDS.BRANDS.COUNTRY],
-                brazeCode: record.fields[Config.AIRTABLE.FIELDS.BRANDS.BRAZE_CODE],
-                raw: record.fields
-            }));
-        } catch (error) {
-            console.error('Failed to fetch brands:', error);
-            throw error;
+async fetchBrands() {
+    try {
+        // Don't use sorting until we confirm field names
+        const records = await this.fetchData(Config.AIRTABLE.TABLES.BRANDS);
+        
+        if (Config.FEATURES.DEBUG_MODE && records.length > 0) {
+            console.log('📊 Sample Brand Record Fields:', Object.keys(records[0].fields));
         }
+        
+        return records.map(record => {
+            // Try multiple field name patterns
+            const code = record.fields['Code'] || 
+                        record.fields['Brand_Code'] || 
+                        record.fields['Brand Code'] || 
+                        record.fields['brand_code'] || 
+                        record.fields['BrandCode'] || 
+                        '';
+                        
+            const name = record.fields['Name'] || 
+                        record.fields['Brand_Name'] || 
+                        record.fields['Brand Name'] || 
+                        record.fields['brand_name'] || 
+                        record.fields['BrandName'] || 
+                        '';
+                        
+            const country = record.fields['Country'] || 
+                           record.fields['country'] || 
+                           record.fields['Country_Code'] || 
+                           '';
+            
+            return {
+                id: record.id,
+                code: code,
+                name: name,
+                country: country,
+                brazeCode: record.fields['Braze_Code'] || record.fields['Braze Code'] || code,
+                raw: record.fields
+            };
+        });
+    } catch (error) {
+        console.error('Failed to fetch brands:', error);
+        throw error;
     }
+}
 
     /**
      * Fetch products filtered by brand

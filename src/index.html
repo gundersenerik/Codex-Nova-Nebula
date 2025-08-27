@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/promocode.css">
+    <link rel="stylesheet" href="css/braze.css">
+    <link rel="stylesheet" href="css/utm.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -24,7 +26,7 @@
             <div class="sidebar-header">
                 <div class="logo">
                     <div class="logo-icon">CN</div>
-                    <span>Codex Nova</span>
+                    <span class="logo-text">Codex Nova</span>
                 </div>
             </div>
 
@@ -41,24 +43,24 @@
                 <div class="nav-section">
                     <div class="nav-section-title">Generators</div>
                     
-                    <button class="nav-item active" data-section="promocode">
+                    <button class="nav-item active" data-section="promocode" data-tooltip="Offercodes">
                         <span class="nav-item-icon">🎫</span>
                         <span>Offercodes</span>
                         <span class="nav-item-badge">Live</span>
                     </button>
 
-                    <button class="nav-item" data-section="braze">
+                    <button class="nav-item" data-section="braze" data-tooltip="Braze Naming">
                         <span class="nav-item-icon">📧</span>
                         <span>Braze Naming</span>
                         <span class="nav-item-badge beta">Beta</span>
                     </button>
 
-                    <button class="nav-item" data-section="utm">
+                    <button class="nav-item" data-section="utm" data-tooltip="UTM Builder">
                         <span class="nav-item-icon">🔗</span>
                         <span>UTM Builder</span>
                     </button>
 
-                    <button class="nav-item" data-section="data">
+                    <button class="nav-item" data-section="data" data-tooltip="Data Management">
                         <span class="nav-item-icon">💾</span>
                         <span>Data Management</span>
                     </button>
@@ -67,14 +69,19 @@
                 <div class="nav-section">
                     <div class="nav-section-title">Resources</div>
                     
-                    <button class="nav-item" data-section="rules">
+                    <button class="nav-item" data-section="rules" data-tooltip="Rules Overview">
                         <span class="nav-item-icon">📋</span>
                         <span>Rules Overview</span>
                     </button>
 
-                    <button class="nav-item" data-section="history">
+                    <button class="nav-item" data-section="history" data-tooltip="History">
                         <span class="nav-item-icon">🕐</span>
                         <span>History</span>
+                    </button>
+
+                    <button class="nav-item" data-section="dashboard" data-tooltip="Dashboard">
+                        <span class="nav-item-icon">📊</span>
+                        <span>Dashboard</span>
                     </button>
                 </div>
             </nav>
@@ -82,9 +89,9 @@
             <!-- User Profile -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">JD</div>
+                    <div class="user-avatar">CJ</div>
                     <div class="user-info">
-                        <div class="user-name">John Doe</div>
+                        <div class="user-name">CJC Team</div>
                         <div class="user-role">Admin</div>
                     </div>
                 </div>
@@ -103,10 +110,16 @@
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
-                    <h1 class="header-title">Naming Standards Platform</h1>
+                    <h1 class="header-title">Generate Offercodes</h1>
                 </div>
 
                 <div class="header-actions">
+                    <button class="icon-button mobile-important" aria-label="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </button>
                     <button class="icon-button" aria-label="Help">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -117,7 +130,7 @@
                     <button class="icon-button" aria-label="Settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 12H6m6 6v6"></path>
+                            <path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 1.54l4.24 4.24M20.46 20.46l4.24 4.24M1.54 20.46l4.24-4.24M23 12h-6m-6 0H1"></path>
                         </svg>
                     </button>
                 </div>
@@ -126,12 +139,12 @@
             <!-- Content Area -->
             <div class="content">
                 <div class="content-inner">
-                    <!-- Default View / Dashboard -->
-                    <div id="dashboard-section" class="tab-content active">
+                    <!-- Dashboard Section (Hidden by default) -->
+                    <div id="dashboard-section" class="tab-content">
                         <!-- Welcome Card -->
                         <div class="welcome-card">
                             <div class="welcome-content">
-                                <h2>Welcome back! 👋</h2>
+                                <h2>Welcome to Codex Nova Nebula! 👋</h2>
                                 <p>Select a tool from the sidebar to get started with generating consistent naming standards across your platforms.</p>
                             </div>
                             <div class="welcome-stats">
@@ -205,100 +218,34 @@
                         </div>
                     </div>
 
-                    <!-- Promocode Section (Hidden by default) -->
-                    <div id="promocode-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Generate Offercode</h2>
-                            </div>
-                            
-                            <!-- Promocode form will be inserted here by JavaScript -->
-                            <div id="promocode-form-container">
-                                <div class="placeholder">
-                                    <div class="placeholder-icon">🎫</div>
-                                    <h3>Promocode Generator</h3>
-                                    <p>Loading promocode form...</p>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Promocode Section (Will be populated by JS) -->
+                    <div id="promocode-section" class="tab-content active">
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
 
                     <!-- Braze Section (Hidden by default) -->
                     <div id="braze-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Braze Naming Standards</h2>
-                            </div>
-                            
-                            <div class="placeholder">
-                                <div class="placeholder-icon">📧</div>
-                                <h3>Braze Campaign Naming</h3>
-                                <p>Generate consistent names for your Braze campaigns, canvases, and segments.</p>
-                                <button class="btn btn-primary mt-lg">Coming Soon</button>
-                            </div>
-                        </div>
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
 
                     <!-- UTM Section (Hidden by default) -->
                     <div id="utm-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">UTM Link Builder</h2>
-                            </div>
-                            
-                            <div class="placeholder">
-                                <div class="placeholder-icon">🔗</div>
-                                <h3>UTM Parameter Builder</h3>
-                                <p>Create properly formatted UTM links for tracking your campaigns.</p>
-                                <button class="btn btn-primary mt-lg">Coming Soon</button>
-                            </div>
-                        </div>
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
 
                     <!-- Data Management Section (Hidden by default) -->
                     <div id="data-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Data Management Naming</h2>
-                            </div>
-                            
-                            <div class="placeholder">
-                                <div class="placeholder-icon">💾</div>
-                                <h3>Data Entity Naming</h3>
-                                <p>Standardize naming conventions for your data management entities.</p>
-                                <button class="btn btn-primary mt-lg">Coming Soon</button>
-                            </div>
-                        </div>
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
 
                     <!-- Rules Overview Section (Hidden by default) -->
                     <div id="rules-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Naming Rules Overview</h2>
-                            </div>
-                            
-                            <div class="placeholder">
-                                <div class="placeholder-icon">📋</div>
-                                <h3>Active Naming Rules</h3>
-                                <p>View and understand the current naming rules and standards applied across all tools.</p>
-                            </div>
-                        </div>
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
 
                     <!-- History Section (Hidden by default) -->
                     <div id="history-section" class="tab-content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">Generation History</h2>
-                            </div>
-                            
-                            <div class="placeholder">
-                                <div class="placeholder-icon">🕐</div>
-                                <h3>Recent History</h3>
-                                <p>View your recently generated codes and naming standards.</p>
-                            </div>
-                        </div>
+                        <!-- Content will be inserted here by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -308,7 +255,25 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay"></div>
 
-    <!-- Scripts -->
+    <!-- ========================================================================
+         SCRIPTS - ORDER IS CRITICAL!
+         ======================================================================== -->
+    
+    <!-- 1. Configuration (must be first) -->
+    <script src="js/config.js"></script>
+    
+    <!-- 2. Services Layer (data fetching) -->
+    <script src="js/services/airtableService.js"></script>
+    <script src="js/services/brandService.js"></script>
+    <script src="js/services/productService.js"></script>
+    <script src="js/services/ratePlanService.js"></script>
+    
+    <!-- 3. Business Logic Modules -->
+    <script src="js/modules/promocode/promocodeGenerator.js"></script>
+    <script src="js/modules/promocode/promocodeParser.js"></script>
+    <script src="js/modules/promocode/promocodeModule.js"></script>
+    
+    <!-- 4. Main Application Controller (must be last) -->
     <script src="js/main.js"></script>
 </body>
 </html>
