@@ -13,112 +13,76 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/promocode.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Animated Background Elements -->
-    <div class="background-animation">
-        <div class="floating-orb orb-1"></div>
-        <div class="floating-orb orb-2"></div>
-        <div class="floating-orb orb-3"></div>
-        <div class="grid-pattern"></div>
-    </div>
-
     <!-- Main App Container -->
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <div class="logo-icon">
-                        <span class="logo-text">CN</span>
-                    </div>
-                    <div class="logo-title">
-                        <h3>Codex Nova</h3>
-                        <span>Nebula</span>
-                    </div>
+                    <div class="logo-icon">CN</div>
+                    <span>Codex Nova</span>
                 </div>
             </div>
 
+            <!-- Search -->
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
             <nav class="nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Generators</div>
                     
-                    <div class="nav-item active" data-section="promocode">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                        </div>
+                    <button class="nav-item active" data-section="promocode">
+                        <span class="nav-item-icon">🎫</span>
                         <span>Offercodes</span>
-                        <div class="nav-item-badge">Live</div>
-                    </div>
+                        <span class="nav-item-badge">Live</span>
+                    </button>
 
-                    <div class="nav-item" data-section="braze">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            </svg>
-                        </div>
+                    <button class="nav-item" data-section="braze">
+                        <span class="nav-item-icon">📧</span>
                         <span>Braze Naming</span>
-                        <div class="nav-item-badge beta">Beta</div>
-                    </div>
+                        <span class="nav-item-badge beta">Beta</span>
+                    </button>
 
-                    <div class="nav-item" data-section="utm">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                            </svg>
-                        </div>
+                    <button class="nav-item" data-section="utm">
+                        <span class="nav-item-icon">🔗</span>
                         <span>UTM Builder</span>
-                    </div>
+                    </button>
 
-                    <div class="nav-item" data-section="data">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                            </svg>
-                        </div>
+                    <button class="nav-item" data-section="data">
+                        <span class="nav-item-icon">💾</span>
                         <span>Data Management</span>
-                    </div>
+                    </button>
                 </div>
 
                 <div class="nav-section">
                     <div class="nav-section-title">Resources</div>
                     
-                    <div class="nav-item" data-section="rules">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                            </svg>
-                        </div>
+                    <button class="nav-item" data-section="rules">
+                        <span class="nav-item-icon">📋</span>
                         <span>Rules Overview</span>
-                    </div>
+                    </button>
 
-                    <div class="nav-item" data-section="history">
-                        <div class="nav-item-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
+                    <button class="nav-item" data-section="history">
+                        <span class="nav-item-icon">🕐</span>
                         <span>History</span>
-                    </div>
+                    </button>
                 </div>
             </nav>
 
+            <!-- User Profile -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        <span>JD</span>
-                    </div>
+                    <div class="user-avatar">JD</div>
                     <div class="user-info">
                         <div class="user-name">John Doe</div>
                         <div class="user-role">Admin</div>
@@ -139,30 +103,21 @@
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
-                    <h1 id="section-title" class="header-title">
-                        <span class="title-prefix">Generate</span>
-                        <span class="title-main">Offercodes & Purchase Links</span>
-                    </h1>
+                    <h1 class="header-title">Naming Standards Platform</h1>
                 </div>
 
                 <div class="header-actions">
-                    <button class="icon-btn" aria-label="Search">
+                    <button class="icon-button" aria-label="Help">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
                         </svg>
                     </button>
-                    <button class="icon-btn" aria-label="Notifications">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                        </svg>
-                        <span class="notification-dot"></span>
-                    </button>
-                    <button class="icon-btn" aria-label="Settings">
+                    <button class="icon-button" aria-label="Settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M12 1v6m0 6v6m4.22-13.22 4.24 4.24M1.54 12H6m6 6 4.24 4.24"></path>
+                            <path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 12H6m6 6v6"></path>
                         </svg>
                     </button>
                 </div>
@@ -171,99 +126,177 @@
             <!-- Content Area -->
             <div class="content">
                 <div class="content-inner">
-                    <!-- Welcome Card -->
-                    <div class="welcome-card">
-                        <div class="welcome-content">
-                            <h2>Welcome back! 👋</h2>
-                            <p>Select a tool from the sidebar to get started, or continue where you left off.</p>
+                    <!-- Default View / Dashboard -->
+                    <div id="dashboard-section" class="tab-content active">
+                        <!-- Welcome Card -->
+                        <div class="welcome-card">
+                            <div class="welcome-content">
+                                <h2>Welcome back! 👋</h2>
+                                <p>Select a tool from the sidebar to get started with generating consistent naming standards across your platforms.</p>
+                            </div>
+                            <div class="welcome-stats">
+                                <div class="stat-card">
+                                    <div class="stat-value">1,247</div>
+                                    <div class="stat-label">Codes Generated</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">98.5%</div>
+                                    <div class="stat-label">Accuracy Rate</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">12min</div>
+                                    <div class="stat-label">Avg. Time Saved</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="welcome-stats">
-                            <div class="stat-card">
-                                <div class="stat-value">1,247</div>
-                                <div class="stat-label">Codes Generated</div>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <h3>Quick Actions</h3>
+                            <div class="action-grid">
+                                <button class="action-card" data-action="generate-promocode">
+                                    <div class="action-icon gradient-1">💰</div>
+                                    <span>Generate Promocode</span>
+                                </button>
+
+                                <button class="action-card" data-action="validate-code">
+                                    <div class="action-icon gradient-2">✓</div>
+                                    <span>Validate Code</span>
+                                </button>
+
+                                <button class="action-card" data-action="create-campaign">
+                                    <div class="action-icon gradient-3">⚡</div>
+                                    <span>Create Campaign</span>
+                                </button>
+
+                                <button class="action-card" data-action="build-utm">
+                                    <div class="action-icon gradient-4">🔗</div>
+                                    <span>Build UTM Link</span>
+                                </button>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-value">98.5%</div>
-                                <div class="stat-label">Accuracy Rate</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">12min</div>
-                                <div class="stat-label">Avg. Time Saved</div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="recent-activity">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon success">✓</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Generated AP-PLUS-3M199K-T-WB-M249</div>
+                                        <div class="activity-time text-muted">2 minutes ago</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon info">ℹ</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Validated CMP_2000_VG_Onboarding</div>
+                                        <div class="activity-time text-muted">15 minutes ago</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon success">✓</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Created UTM link for Summer Campaign</div>
+                                        <div class="activity-time text-muted">1 hour ago</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="quick-actions">
-                        <h3>Quick Actions</h3>
-                        <div class="action-grid">
-                            <button class="action-card" data-action="generate-promocode">
-                                <div class="action-icon gradient-1">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                    </svg>
+                    <!-- Promocode Section (Hidden by default) -->
+                    <div id="promocode-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Generate Offercode</h2>
+                            </div>
+                            
+                            <!-- Promocode form will be inserted here by JavaScript -->
+                            <div id="promocode-form-container">
+                                <div class="placeholder">
+                                    <div class="placeholder-icon">🎫</div>
+                                    <h3>Promocode Generator</h3>
+                                    <p>Loading promocode form...</p>
                                 </div>
-                                <span>Generate Promocode</span>
-                            </button>
-
-                            <button class="action-card" data-action="validate-code">
-                                <div class="action-icon gradient-2">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Validate Code</span>
-                            </button>
-
-                            <button class="action-card" data-action="create-campaign">
-                                <div class="action-icon gradient-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                    </svg>
-                                </div>
-                                <span>Create Campaign</span>
-                            </button>
-
-                            <button class="action-card" data-action="build-utm">
-                                <div class="action-icon gradient-4">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="12" cy="5" r="1"></circle>
-                                        <circle cx="12" cy="19" r="1"></circle>
-                                    </svg>
-                                </div>
-                                <span>Build UTM Link</span>
-                            </button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Recent Activity -->
-                    <div class="recent-activity">
-                        <h3>Recent Activity</h3>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon success">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Generated AP-PLUS-3M199K-T-WB-M249</div>
-                                    <div class="activity-time">2 minutes ago</div>
-                                </div>
+                    <!-- Braze Section (Hidden by default) -->
+                    <div id="braze-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Braze Naming Standards</h2>
                             </div>
-                            <div class="activity-item">
-                                <div class="activity-icon info">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                    </svg>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Validated CMP_2000_VG_Onboarding</div>
-                                    <div class="activity-time">15 minutes ago</div>
-                                </div>
+                            
+                            <div class="placeholder">
+                                <div class="placeholder-icon">📧</div>
+                                <h3>Braze Campaign Naming</h3>
+                                <p>Generate consistent names for your Braze campaigns, canvases, and segments.</p>
+                                <button class="btn btn-primary mt-lg">Coming Soon</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UTM Section (Hidden by default) -->
+                    <div id="utm-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">UTM Link Builder</h2>
+                            </div>
+                            
+                            <div class="placeholder">
+                                <div class="placeholder-icon">🔗</div>
+                                <h3>UTM Parameter Builder</h3>
+                                <p>Create properly formatted UTM links for tracking your campaigns.</p>
+                                <button class="btn btn-primary mt-lg">Coming Soon</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management Section (Hidden by default) -->
+                    <div id="data-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Data Management Naming</h2>
+                            </div>
+                            
+                            <div class="placeholder">
+                                <div class="placeholder-icon">💾</div>
+                                <h3>Data Entity Naming</h3>
+                                <p>Standardize naming conventions for your data management entities.</p>
+                                <button class="btn btn-primary mt-lg">Coming Soon</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rules Overview Section (Hidden by default) -->
+                    <div id="rules-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Naming Rules Overview</h2>
+                            </div>
+                            
+                            <div class="placeholder">
+                                <div class="placeholder-icon">📋</div>
+                                <h3>Active Naming Rules</h3>
+                                <p>View and understand the current naming rules and standards applied across all tools.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Section (Hidden by default) -->
+                    <div id="history-section" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Generation History</h2>
+                            </div>
+                            
+                            <div class="placeholder">
+                                <div class="placeholder-icon">🕐</div>
+                                <h3>Recent History</h3>
+                                <p>View your recently generated codes and naming standards.</p>
                             </div>
                         </div>
                     </div>

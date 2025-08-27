@@ -1,13 +1,30 @@
 /* ============================================================================
    CODEX NOVA NEBULA - Animations
-   Modern animations including the special "rocket" micro-animation
+   Minimal, functional animations for productivity
    ============================================================================ */
 
 /* ============================================================================
-   ENTRANCE ANIMATIONS
+   BASIC TRANSITIONS
    ============================================================================ */
 
-/* Fade Animations */
+/* Default transition for interactive elements */
+.transition {
+    transition: all var(--transition-base);
+}
+
+.transition-fast {
+    transition: all var(--transition-fast);
+}
+
+.transition-slow {
+    transition: all var(--transition-slow);
+}
+
+/* ============================================================================
+   SIMPLE ENTRANCE ANIMATIONS
+   ============================================================================ */
+
+/* Fade In */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -17,206 +34,58 @@
     }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.fade-in {
+    animation: fadeIn var(--transition-base) ease-out;
 }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Slide Animations */
+/* Slide Down (for dropdowns) */
 @keyframes slideDown {
     from {
-        transform: translateY(-100%);
         opacity: 0;
+        transform: translateY(-10px);
     }
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
+.slide-down {
+    animation: slideDown var(--transition-base) ease-out;
+}
+
+/* Slide Up (for modals/toasts) */
 @keyframes slideUp {
     from {
-        transform: translateY(100%);
         opacity: 0;
+        transform: translateY(10px);
     }
     to {
+        opacity: 1;
         transform: translateY(0);
-        opacity: 1;
     }
 }
 
-@keyframes slideLeft {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideRight {
-    from {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Scale Animations */
-@keyframes scaleIn {
-    from {
-        transform: scale(0);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes scaleUp {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes zoomIn {
-    from {
-        transform: scale(0.5);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* ============================================================================
-   SPECIAL ROCKET ANIMATION (For Generate Button)
-   ============================================================================ */
-
-@keyframes rocket {
-    0% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-    15% {
-        transform: translateY(-3px) rotate(-5deg) scale(1.05);
-    }
-    30% {
-        transform: translateY(-5px) rotate(3deg) scale(1.1);
-    }
-    45% {
-        transform: translateY(-7px) rotate(-3deg) scale(1.05);
-    }
-    60% {
-        transform: translateY(-5px) rotate(2deg) scale(1);
-    }
-    75% {
-        transform: translateY(-3px) rotate(-1deg) scale(1);
-    }
-    100% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-}
-
-.generate-btn:active::after,
-#generate-promocode-btn:active::after {
-    content: '🚀';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    animation: rocket 0.8s var(--ease-spring);
-    pointer-events: none;
-}
-
-/* Rocket Trail Effect */
-@keyframes rocketTrail {
-    0% {
-        opacity: 0;
-        transform: translateY(0) scaleY(0);
-    }
-    50% {
-        opacity: 1;
-        transform: translateY(10px) scaleY(1.5);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(20px) scaleY(0.5);
-    }
+.slide-up {
+    animation: slideUp var(--transition-base) ease-out;
 }
 
 /* ============================================================================
    LOADING ANIMATIONS
    ============================================================================ */
 
+/* Simple Spin */
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-    50% {
-        transform: translateY(-25%);
-        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
+.spin {
+    animation: spin 1s linear infinite;
 }
 
+/* Pulse for loading text */
 @keyframes pulse {
     0%, 100% {
         opacity: 1;
@@ -226,55 +95,43 @@
     }
 }
 
-@keyframes ping {
-    75%, 100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
-
-/* Loading Spinner */
-.loading-spinner {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-}
-
-.loading-spinner::after {
-    content: '';
-    display: block;
-    width: 32px;
-    height: 32px;
-    margin: 4px;
-    border-radius: 50%;
-    border: 3px solid var(--glass-border);
-    border-color: var(--primary) transparent var(--primary) transparent;
-    animation: spin 1.2s linear infinite;
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
 }
 
 /* Loading Dots */
-.loading-dots {
-    display: inline-flex;
-    gap: 4px;
+@keyframes loadingDot {
+    0%, 80%, 100% {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .loading-dots span {
-    width: 8px;
-    height: 8px;
-    background: var(--primary);
-    border-radius: 50%;
-    animation: bounce 1.4s infinite ease-in-out both;
+    animation: loadingDot 1.4s ease-in-out infinite both;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-.loading-dots span:nth-child(3) { animation-delay: 0; }
+.loading-dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 /* ============================================================================
-   SHIMMER EFFECTS
+   SKELETON LOADING
    ============================================================================ */
 
-@keyframes shimmer {
+@keyframes skeleton {
     0% {
         background-position: -200% 0;
     }
@@ -283,143 +140,151 @@
     }
 }
 
-.shimmer {
+.skeleton-loader {
     background: linear-gradient(
         90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.2) 20%,
-        rgba(255, 255, 255, 0.3) 50%,
-        rgba(255, 255, 255, 0.2) 80%,
-        transparent 100%
+        var(--gray-200) 0%,
+        var(--gray-100) 50%,
+        var(--gray-200) 100%
     );
     background-size: 200% 100%;
-    animation: shimmer 2s infinite;
+    animation: skeleton 1.5s ease-in-out infinite;
 }
 
 /* ============================================================================
-   GLOW ANIMATIONS
+   SUCCESS/ERROR FEEDBACK
    ============================================================================ */
 
-@keyframes glow {
-    0%, 100% {
-        box-shadow: 0 0 5px var(--primary-glow),
-                    0 0 10px var(--primary-glow),
-                    0 0 15px var(--primary-glow);
-    }
-    50% {
-        box-shadow: 0 0 10px var(--primary-glow),
-                    0 0 20px var(--primary-glow),
-                    0 0 30px var(--primary-glow);
-    }
-}
-
-@keyframes textGlow {
-    0%, 100% {
-        text-shadow: 0 0 5px var(--primary-glow),
-                     0 0 10px var(--primary-glow);
-    }
-    50% {
-        text-shadow: 0 0 10px var(--primary-glow),
-                     0 0 20px var(--primary-glow),
-                     0 0 30px var(--primary-glow);
-    }
-}
-
-/* ============================================================================
-   WAVE ANIMATIONS
-   ============================================================================ */
-
-@keyframes wave {
-    0% {
-        transform: rotate(0deg);
-    }
-    10% {
-        transform: rotate(14deg);
-    }
-    20% {
-        transform: rotate(-8deg);
-    }
-    30% {
-        transform: rotate(14deg);
-    }
-    40% {
-        transform: rotate(-4deg);
-    }
-    50% {
-        transform: rotate(10deg);
-    }
-    60% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
-
-/* ============================================================================
-   SUCCESS ANIMATIONS
-   ============================================================================ */
-
+/* Success Checkmark */
 @keyframes checkmark {
     0% {
-        stroke-dashoffset: 100;
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
+        stroke-dashoffset: 50;
     }
     100% {
         stroke-dashoffset: 0;
-        opacity: 1;
     }
 }
 
-@keyframes success {
-    0% {
-        transform: scale(0) rotate(45deg);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2) rotate(45deg);
-    }
-    100% {
-        transform: scale(1) rotate(45deg);
-        opacity: 1;
-    }
+.checkmark-animation {
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    animation: checkmark 0.3s ease-out forwards;
 }
 
-/* ============================================================================
-   ERROR ANIMATIONS
-   ============================================================================ */
-
+/* Error Shake */
 @keyframes shake {
     0%, 100% {
         transform: translateX(0);
     }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-10px);
+    25% {
+        transform: translateX(-5px);
     }
-    20%, 40%, 60%, 80% {
-        transform: translateX(10px);
+    75% {
+        transform: translateX(5px);
     }
 }
 
-@keyframes error {
+.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* ============================================================================
+   COPY TO CLIPBOARD
+   ============================================================================ */
+
+@keyframes copySuccess {
     0% {
-        transform: scale(0) rotate(45deg);
-        opacity: 0;
+        background-color: var(--primary);
     }
     50% {
-        transform: scale(1.2) rotate(45deg);
+        background-color: var(--success);
+        transform: scale(0.95);
     }
     100% {
-        transform: scale(1) rotate(45deg);
+        background-color: var(--primary);
+        transform: scale(1);
+    }
+}
+
+.copy-success {
+    animation: copySuccess 0.4s ease-in-out;
+}
+
+/* ============================================================================
+   FORM VALIDATION
+   ============================================================================ */
+
+/* Invalid Input */
+@keyframes invalidInput {
+    0%, 100% {
+        border-color: var(--danger);
+    }
+    50% {
+        border-color: var(--danger)80;
+    }
+}
+
+.invalid-animation {
+    animation: invalidInput 0.5s ease-in-out;
+}
+
+/* ============================================================================
+   TOOLTIPS
+   ============================================================================ */
+
+@keyframes tooltipIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tooltip {
+    animation: tooltipIn 0.2s ease-out;
+}
+
+/* ============================================================================
+   ACCORDION/COLLAPSE
+   ============================================================================ */
+
+@keyframes expand {
+    from {
+        max-height: 0;
+        opacity: 0;
+    }
+    to {
+        max-height: 500px;
         opacity: 1;
     }
 }
 
+@keyframes collapse {
+    from {
+        max-height: 500px;
+        opacity: 1;
+    }
+    to {
+        max-height: 0;
+        opacity: 0;
+    }
+}
+
+.expand {
+    animation: expand 0.3s ease-out forwards;
+    overflow: hidden;
+}
+
+.collapse {
+    animation: collapse 0.3s ease-out forwards;
+    overflow: hidden;
+}
+
 /* ============================================================================
-   NOTIFICATION ANIMATIONS
+   NOTIFICATION SLIDE
    ============================================================================ */
 
 @keyframes notificationSlide {
@@ -433,175 +298,165 @@
     }
 }
 
-@keyframes notificationBounce {
-    0% {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    60% {
-        transform: translateY(10px);
-        opacity: 1;
-    }
-    80% {
-        transform: translateY(-5px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
-/* ============================================================================
-   COPY TO CLIPBOARD ANIMATION
-   ============================================================================ */
-
-@keyframes copySuccess {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(0.9);
-        background: var(--success);
-    }
-    100% {
-        transform: scale(1);
-        background: var(--gradient-1);
-    }
-}
-
-.copy-animation {
-    animation: copySuccess 0.3s ease-in-out;
-}
-
-/* ============================================================================
-   FORM VALIDATION ANIMATIONS
-   ============================================================================ */
-
-@keyframes invalidInput {
-    0%, 100% {
+@keyframes notificationExit {
+    from {
         transform: translateX(0);
-    }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-5px);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translateX(5px);
-    }
-}
-
-.invalid-shake {
-    animation: invalidInput 0.5s ease-in-out;
-    border-color: var(--danger) !important;
-}
-
-/* ============================================================================
-   MODAL ANIMATIONS
-   ============================================================================ */
-
-@keyframes modalIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9) translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-@keyframes modalOut {
-    from {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: scale(0.9) translateY(-20px);
-    }
-}
-
-@keyframes overlayIn {
-    from {
-        opacity: 0;
-    }
-    to {
         opacity: 1;
     }
-}
-
-/* ============================================================================
-   CARD HOVER ANIMATIONS
-   ============================================================================ */
-
-@keyframes cardLift {
-    from {
-        transform: translateY(0);
-        box-shadow: var(--shadow-md);
-    }
     to {
-        transform: translateY(-8px);
-        box-shadow: var(--shadow-2xl);
-    }
-}
-
-/* ============================================================================
-   TEXT ANIMATIONS
-   ============================================================================ */
-
-@keyframes typing {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
-}
-
-@keyframes blink {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
+        transform: translateX(100%);
         opacity: 0;
     }
 }
 
-.typing-effect {
-    overflow: hidden;
-    white-space: nowrap;
-    animation: typing 3.5s steps(40, end);
+.notification-enter {
+    animation: notificationSlide 0.3s ease-out;
 }
 
-.cursor {
-    animation: blink 1s infinite;
+.notification-exit {
+    animation: notificationExit 0.3s ease-out;
 }
 
 /* ============================================================================
-   ANIMATION UTILITY CLASSES
+   PROGRESS BAR
    ============================================================================ */
 
-.animate-fadeIn { animation: fadeIn var(--transition-base); }
-.animate-fadeInUp { animation: fadeInUp var(--transition-base); }
-.animate-fadeInDown { animation: fadeInDown var(--transition-base); }
-.animate-slideDown { animation: slideDown var(--transition-base); }
-.animate-slideUp { animation: slideUp var(--transition-base); }
-.animate-scaleIn { animation: scaleIn var(--transition-base); }
-.animate-spin { animation: spin 1s linear infinite; }
-.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-.animate-bounce { animation: bounce 1s infinite; }
-.animate-shake { animation: shake 0.5s; }
-.animate-glow { animation: glow 2s ease-in-out infinite; }
+@keyframes progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: var(--progress-value, 100%);
+    }
+}
 
-/* Animation Delays */
+.progress-animation {
+    animation: progress 0.5s ease-out forwards;
+}
+
+/* ============================================================================
+   UTILITY ANIMATION CLASSES
+   ============================================================================ */
+
+/* Delays */
 .delay-100 { animation-delay: 100ms; }
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
 
-/* Animation Duration */
-.duration-100 { animation-duration: 100ms; }
+/* Durations */
 .duration-200 { animation-duration: 200ms; }
 .duration-300 { animation-duration: 300ms; }
 .duration-500 { animation-duration: 500ms; }
-.duration-700 { animation-duration: 700ms; }
 .duration-1000 { animation-duration: 1000ms; }
+
+/* Fill modes */
+.fill-forwards { animation-fill-mode: forwards; }
+.fill-backwards { animation-fill-mode: backwards; }
+.fill-both { animation-fill-mode: both; }
+
+/* ============================================================================
+   HOVER EFFECTS (Subtle)
+   ============================================================================ */
+
+/* Subtle lift on hover */
+.hover-lift {
+    transition: transform var(--transition-fast);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+/* Subtle scale */
+.hover-scale {
+    transition: transform var(--transition-fast);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* Focus scale (for buttons) */
+.focus-scale {
+    transition: transform var(--transition-fast);
+}
+
+.focus-scale:active {
+    transform: scale(0.98);
+}
+
+/* ============================================================================
+   DISABLED ANIMATIONS
+   ============================================================================ */
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .hover-lift:hover,
+    .hover-scale:hover,
+    .focus-scale:active {
+        transform: none;
+    }
+}
+
+/* ============================================================================
+   SPECIAL: GENERATE BUTTON (Professional Version)
+   ============================================================================ */
+
+/* Simple professional animation for generate button */
+@keyframes generatePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(91, 91, 214, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(91, 91, 214, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(91, 91, 214, 0);
+    }
+}
+
+.generate-btn {
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.generate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.generate-btn:active {
+    transform: translateY(0);
+    animation: generatePulse 0.5s ease-out;
+}
+
+/* Loading state for generate button */
+.generate-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.generate-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
