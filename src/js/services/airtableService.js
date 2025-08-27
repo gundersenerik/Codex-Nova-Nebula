@@ -1,6 +1,7 @@
 /* ============================================================================
    CODEX NOVA NEBULA - Airtable Service
    Core service for all Airtable API interactions with caching
+   UPDATED: Better product field discovery
    ============================================================================ */
 
 class AirtableService {
@@ -10,6 +11,13 @@ class AirtableService {
         this.apiKey = Config.AIRTABLE.API_KEY;
         this.cache = new Map();
         this.pendingRequests = new Map();
+        
+        // Store discovered field mappings
+        this.fieldMappings = {
+            brands: {},
+            products: {},
+            ratePlans: {}
+        };
     }
 
     /**
@@ -69,7 +77,6 @@ class AirtableService {
      */
     getHeaders() {
         if (Config.FEATURES.USE_PROXY) {
-            // If using proxy, might not need auth headers
             return {
                 'Content-Type': 'application/json'
             };
@@ -88,7 +95,7 @@ class AirtableService {
         const cacheKey = this.getCacheKey(tableName, options);
         
         // Check cache first if caching is enabled
-        if (Config.FEATURES.USE_CACHE) {
+        if (Config.FEATURES.USE_CACHE && !options.noCache) {
             const cachedData = this.cache.get(cacheKey);
             if (this.isCacheValid(cachedData)) {
                 if (Config.FEATURES.DEBUG_MODE) {
@@ -98,7 +105,7 @@ class AirtableService {
             }
         }
         
-        // Check if request is already pending (prevent duplicate requests)
+        // Check if request is already pending
         if (this.pendingRequests.has(cacheKey)) {
             if (Config.FEATURES.DEBUG_MODE) {
                 console.log(`⏳ Waiting for pending request: ${tableName}`);
@@ -123,7 +130,6 @@ class AirtableService {
             
             return data;
         } finally {
-            // Remove from pending requests
             this.pendingRequests.delete(cacheKey);
         }
     }
@@ -146,15 +152,26 @@ class AirtableService {
             });
             
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Get more details about the error
+                let errorDetails = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody.error) {
+                        errorDetails = `Airtable Error: ${errorBody.error.type || 'Unknown'} - ${errorBody.error.message || 'No message'}`;
+                        console.error('📛 Airtable API Error:', errorBody.error);
+                    }
+                } catch (e) {
+                    // Could not parse error body
+                }
+                throw new Error(errorDetails);
             }
             
             const data = await response.json();
             
-            // Handle pagination if there are more records
+            // Handle pagination
             let allRecords = [...data.records];
             
-            if (data.offset) {
+            if (data.offset && !options.noPagination) {
                 const nextOptions = { ...options, offset: data.offset };
                 const nextData = await this.performFetch(tableName, nextOptions);
                 allRecords = [...allRecords, ...nextData];
@@ -163,8 +180,8 @@ class AirtableService {
             return allRecords;
             
         } catch (error) {
-            // Retry logic
-            if (retryCount < Config.API.RETRY_ATTEMPTS) {
+            // Retry logic for network errors only
+            if (retryCount < Config.API.RETRY_ATTEMPTS && !error.message.includes('422') && !error.message.includes('INVALID_FILTER')) {
                 if (Config.FEATURES.DEBUG_MODE) {
                     console.log(`⚠️ Retry ${retryCount + 1}/${Config.API.RETRY_ATTEMPTS} for ${tableName}`);
                 }
@@ -182,18 +199,16 @@ class AirtableService {
     }
 
     /**
-     * Clear cache (all or specific table)
+     * Clear cache
      */
     clearCache(tableName = null) {
         if (tableName) {
-            // Clear specific table cache
             for (const [key] of this.cache) {
                 if (key.startsWith(tableName)) {
                     this.cache.delete(key);
                 }
             }
         } else {
-            // Clear all cache
             this.cache.clear();
         }
         
@@ -209,97 +224,185 @@ class AirtableService {
     /**
      * Fetch all brands
      */
-async fetchBrands() {
-    try {
-        // Don't use sorting until we confirm field names
-        const records = await this.fetchData(Config.AIRTABLE.TABLES.BRANDS);
-        
-        if (Config.FEATURES.DEBUG_MODE && records.length > 0) {
-            console.log('📊 Sample Brand Record Fields:', Object.keys(records[0].fields));
-        }
-        
-        return records.map(record => {
-            // Try multiple field name patterns
-            const code = record.fields['Code'] || 
-                        record.fields['Brand_Code'] || 
-                        record.fields['Brand Code'] || 
-                        record.fields['brand_code'] || 
-                        record.fields['BrandCode'] || 
-                        '';
-                        
-            const name = record.fields['Name'] || 
-                        record.fields['Brand_Name'] || 
-                        record.fields['Brand Name'] || 
-                        record.fields['brand_name'] || 
-                        record.fields['BrandName'] || 
-                        '';
-                        
-            const country = record.fields['Country'] || 
-                           record.fields['country'] || 
-                           record.fields['Country_Code'] || 
-                           '';
+    async fetchBrands() {
+        try {
+            const records = await this.fetchData(Config.AIRTABLE.TABLES.BRANDS);
             
-            return {
-                id: record.id,
-                code: code,
-                name: name,
-                country: country,
-                brazeCode: record.fields['Braze_Code'] || record.fields['Braze Code'] || code,
-                raw: record.fields
-            };
-        });
-    } catch (error) {
-        console.error('Failed to fetch brands:', error);
-        throw error;
+            // Log field structure for first brand
+            if (records.length > 0 && !this.fieldMappings.brands.logged) {
+                console.log('📊 BRAND TABLE STRUCTURE:');
+                console.log('  Fields:', Object.keys(records[0].fields));
+                console.log('  Sample:', JSON.stringify(records[0].fields, null, 2));
+                this.fieldMappings.brands.logged = true;
+            }
+            
+            return records.map(record => {
+                const fields = record.fields;
+                
+                return {
+                    id: record.id,
+                    code: fields['Brand_Code'] || fields['Code'] || '',
+                    name: fields['Brand_Name'] || fields['Name'] || '',
+                    country: fields['Country'] || '',
+                    brazeCode: fields['Braze_Code'] || fields['Brand_Code'] || '',
+                    raw: fields
+                };
+            });
+        } catch (error) {
+            console.error('Failed to fetch brands:', error);
+            throw error;
+        }
     }
-}
 
     /**
      * Fetch products filtered by brand
      */
     async fetchProductsByBrand(brandId) {
         try {
-            // Create filter formula for linked records
-            const filterFormula = `FIND('${brandId}', {${Config.AIRTABLE.FIELDS.PRODUCTS.BRAND}})`;
+            // First, let's fetch ALL products to see their structure and find the right ones
+            console.log('🔍 Fetching all products to analyze structure...');
+            const allRecords = await this.fetchData(Config.AIRTABLE.TABLES.PRODUCTS);
             
-            const records = await this.fetchData(Config.AIRTABLE.TABLES.PRODUCTS, {
-                filterByFormula: filterFormula,
-                sort: [{ field: Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_NAME, direction: 'asc' }]
+            if (allRecords.length > 0) {
+                console.log('📊 PRODUCT TABLE ANALYSIS:');
+                console.log('  Total products:', allRecords.length);
+                console.log('  First product fields:', Object.keys(allRecords[0].fields));
+                console.log('  First product data:', JSON.stringify(allRecords[0].fields, null, 2));
+                
+                // Look for any field that might contain brand references
+                const sampleProduct = allRecords[0].fields;
+                for (const [fieldName, fieldValue] of Object.entries(sampleProduct)) {
+                    if (fieldValue && (Array.isArray(fieldValue) || typeof fieldValue === 'string')) {
+                        // Check if this field contains record IDs (they start with 'rec')
+                        const valueToCheck = Array.isArray(fieldValue) ? fieldValue[0] : fieldValue;
+                        if (valueToCheck && typeof valueToCheck === 'string' && valueToCheck.startsWith('rec')) {
+                            console.log(`  Potential link field "${fieldName}":`, fieldValue);
+                        }
+                    }
+                }
+            }
+            
+            // Now filter products for our brand
+            // Since the Brand has a Products field with product IDs, we can use those IDs
+            const brand = await this.fetchBrandById(brandId);
+            if (brand && brand.fields.Products) {
+                const productIds = brand.fields.Products;
+                console.log('📦 Brand has these product IDs:', productIds);
+                
+                // Filter products by ID
+                const brandProducts = allRecords.filter(record => 
+                    productIds.includes(record.id)
+                );
+                
+                console.log(`✅ Found ${brandProducts.length} products for brand`);
+                
+                return brandProducts.map(record => {
+                    const fields = record.fields;
+                    
+                    return {
+                        id: record.id,
+                        name: fields['Product_Name'] || fields['Name'] || 'Unknown Product',
+                        type: fields['Product_Type'] || fields['Type'] || fields['Category'] || '',
+                        code: fields['Product_Code'] || fields['Code'] || fields['SKU'] || '',
+                        brandIds: [brandId], // We know this product belongs to this brand
+                        promocodeId: fields['Promocode_ID'] || fields['Promocode ID'] || '',
+                        raw: fields
+                    };
+                });
+            }
+            
+            // If we can't find products through the brand's Products field, try other methods
+            console.log('⚠️ Could not find products through Brand.Products field');
+            
+            // Try to find which field in Products links to Brand
+            const records = allRecords.filter(record => {
+                const fields = record.fields;
+                
+                // Check various possible field names
+                for (const possibleField of ['Brand', 'Brands', 'Brand_ID', 'BrandID', 'brand']) {
+                    const fieldValue = fields[possibleField];
+                    if (fieldValue) {
+                        if (Array.isArray(fieldValue)) {
+                            if (fieldValue.includes(brandId)) return true;
+                        } else if (fieldValue === brandId) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
             
-            return records.map(record => ({
-                id: record.id,
-                name: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_NAME],
-                type: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_TYPE],
-                code: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_CODE],
-                brandIds: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.BRAND] || [],
-                promocodeId: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PROMOCODE_ID],
-                raw: record.fields
-            }));
+            console.log(`📦 Alternative filter found ${records.length} products`);
+            
+            return records.map(record => {
+                const fields = record.fields;
+                
+                return {
+                    id: record.id,
+                    name: fields['Product_Name'] || fields['Name'] || 'Unknown Product',
+                    type: fields['Product_Type'] || fields['Type'] || fields['Category'] || '',
+                    code: fields['Product_Code'] || fields['Code'] || fields['SKU'] || '',
+                    brandIds: [brandId],
+                    promocodeId: fields['Promocode_ID'] || fields['Promocode ID'] || '',
+                    raw: fields
+                };
+            });
         } catch (error) {
             console.error('Failed to fetch products:', error);
-            throw error;
+            return [];
         }
     }
 
     /**
-     * Fetch all products (unfiltered)
+     * Fetch a single brand by ID
+     */
+    async fetchBrandById(brandId) {
+        try {
+            // Try to get from cache first
+            const cachedBrands = this.cache.get(`${Config.AIRTABLE.TABLES.BRANDS}_{}`);
+            if (cachedBrands && this.isCacheValid(cachedBrands)) {
+                const brand = cachedBrands.data.find(b => b.id === brandId);
+                if (brand) return brand;
+            }
+            
+            // Fetch directly
+            const url = `${this.baseUrl}/${this.baseId}/${Config.AIRTABLE.TABLES.BRANDS}/${brandId}`;
+            const response = await fetch(url, {
+                headers: this.getHeaders()
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch brand: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch brand by ID:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Fetch all products
      */
     async fetchAllProducts() {
         try {
-            const records = await this.fetchData(Config.AIRTABLE.TABLES.PRODUCTS, {
-                sort: [{ field: Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_NAME, direction: 'asc' }]
-            });
+            const records = await this.fetchData(Config.AIRTABLE.TABLES.PRODUCTS);
             
-            return records.map(record => ({
-                id: record.id,
-                name: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_NAME],
-                type: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_TYPE],
-                code: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PRODUCT_CODE],
-                brandIds: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.BRAND] || [],
-                promocodeId: record.fields[Config.AIRTABLE.FIELDS.PRODUCTS.PROMOCODE_ID],
-                raw: record.fields
-            }));
+            return records.map(record => {
+                const fields = record.fields;
+                
+                return {
+                    id: record.id,
+                    name: fields['Product_Name'] || fields['Name'] || 'Unknown Product',
+                    type: fields['Product_Type'] || fields['Type'] || '',
+                    code: fields['Product_Code'] || fields['Code'] || '',
+                    brandIds: fields['Brand'] || fields['Brands'] || [],
+                    promocodeId: fields['Promocode_ID'] || '',
+                    raw: fields
+                };
+            });
         } catch (error) {
             console.error('Failed to fetch all products:', error);
             throw error;
@@ -311,108 +414,111 @@ async fetchBrands() {
      */
     async fetchRatePlansByProduct(productId) {
         try {
-            // Create filter formula for linked records
-            const filterFormula = `FIND('${productId}', {${Config.AIRTABLE.FIELDS.RATE_PLANS.PRODUCT}})`;
+            // First fetch all rate plans to understand structure
+            console.log('🔍 Fetching rate plans for product:', productId);
+            const allRecords = await this.fetchData(Config.AIRTABLE.TABLES.RATE_PLANS);
             
-            const records = await this.fetchData(Config.AIRTABLE.TABLES.RATE_PLANS, {
-                filterByFormula: filterFormula,
-                sort: [{ field: Config.AIRTABLE.FIELDS.RATE_PLANS.PLAN_NAME, direction: 'asc' }]
+            if (allRecords.length > 0 && !this.fieldMappings.ratePlans.logged) {
+                console.log('📊 RATE PLAN TABLE STRUCTURE:');
+                console.log('  Total rate plans:', allRecords.length);
+                console.log('  First rate plan fields:', Object.keys(allRecords[0].fields));
+                console.log('  First rate plan data:', JSON.stringify(allRecords[0].fields, null, 2));
+                this.fieldMappings.ratePlans.logged = true;
+            }
+            
+            // Filter for this product
+            const records = allRecords.filter(record => {
+                const fields = record.fields;
+                
+                // Check various possible field names for product link
+                for (const possibleField of ['Product', 'Products', 'Product_ID', 'ProductID']) {
+                    const fieldValue = fields[possibleField];
+                    if (fieldValue) {
+                        if (Array.isArray(fieldValue)) {
+                            if (fieldValue.includes(productId)) return true;
+                        } else if (fieldValue === productId) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
             
-            return records.map(record => ({
-                id: record.id,
-                code: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.PLAN_CODE],
-                name: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.PLAN_NAME],
-                price: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.PRICE],
-                category: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.CATEGORY],
-                productIds: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.PRODUCT] || [],
-                planId: record.fields[Config.AIRTABLE.FIELDS.RATE_PLANS.PLAN_ID],
-                raw: record.fields
-            }));
+            console.log(`📦 Found ${records.length} rate plans for product`);
+            
+            return records.map(record => {
+                const fields = record.fields;
+                
+                return {
+                    id: record.id,
+                    code: fields['Code'] || fields['Plan_Code'] || '',
+                    name: fields['Name'] || fields['Plan_Name'] || fields['Rate_Plan_Name'] || '',
+                    price: fields['Price'] || 0,
+                    category: fields['Category'] || fields['Type'] || '',
+                    productIds: [productId],
+                    planId: fields['Plan_ID'] || fields['ID'] || '',
+                    raw: fields
+                };
+            });
         } catch (error) {
             console.error('Failed to fetch rate plans:', error);
-            throw error;
+            return [];
         }
     }
 
     /**
-     * Fetch active ruleset for promocodes
+     * Fetch promocode ruleset
      */
     async fetchPromocodeRuleset(brandId = null) {
         try {
-            const filterParts = [
-                `{${Config.AIRTABLE.FIELDS.RULESETS.TYPE}} = 'Promocode'`,
-                `{${Config.AIRTABLE.FIELDS.RULESETS.STATUS}} = 'Active'`
-            ];
-            
-            const filterFormula = `AND(${filterParts.join(', ')})`;
-            
+            // Try to fetch from Rulesets table if it exists
             const records = await this.fetchData(Config.AIRTABLE.TABLES.RULESETS, {
-                filterByFormula: filterFormula,
-                maxRecords: 1,
-                sort: [{ field: Config.AIRTABLE.FIELDS.RULESETS.VERSION, direction: 'desc' }]
+                maxRecords: 1
             });
             
-            if (records.length === 0) {
-                throw new Error('No active promocode ruleset found');
+            if (records.length > 0) {
+                const ruleset = records[0].fields;
+                console.log('📋 Found ruleset in Airtable:', ruleset);
+                
+                // Parse JSON fields if they exist
+                let periodMap = Config.PROMOCODE.PERIODS;
+                let termMap = Config.PROMOCODE.TERMS;
+                let priceTypeMap = Config.PROMOCODE.DISCOUNT_TYPES;
+                
+                try {
+                    if (ruleset['Period_Map_JSON']) periodMap = JSON.parse(ruleset['Period_Map_JSON']);
+                    if (ruleset['Term_Map_JSON']) termMap = JSON.parse(ruleset['Term_Map_JSON']);
+                    if (ruleset['Price_Type_Map_JSON']) priceTypeMap = JSON.parse(ruleset['Price_Type_Map_JSON']);
+                } catch (e) {
+                    console.log('Could not parse JSON fields');
+                }
+                
+                return {
+                    separator: ruleset['Separator'] || '-',
+                    casing: ruleset['Casing'] || 'UPPER',
+                    periodMap: periodMap,
+                    termMap: termMap,
+                    priceTypeMap: priceTypeMap,
+                    freetextMaxLength: ruleset['Freetext_Max_Length'] || 15,
+                    initialOfferRegex: ruleset['InitialOffer_Regex'] || '^(\\d+)([MUQY])(\\d+)([KP])$',
+                    renewalPlanRegex: ruleset['RenewalPlan_Regex'] || '^([MQYU])(\\d+)$'
+                };
             }
-            
-            const ruleset = records[0];
-            return {
-                id: ruleset.id,
-                name: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.NAME],
-                version: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.VERSION],
-                segmentsOrder: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.SEGMENTS_ORDER],
-                separator: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.SEPARATOR] || '-',
-                casing: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.CASING] || 'UPPER',
-                initialOfferRegex: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.INITIAL_OFFER_REGEX],
-                renewalPlanRegex: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.RENEWAL_PLAN_REGEX],
-                periodMap: JSON.parse(ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.PERIOD_MAP] || '{}'),
-                termMap: JSON.parse(ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.TERM_MAP] || '{}'),
-                priceTypeMap: JSON.parse(ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.PRICE_TYPE_MAP] || '{}'),
-                freetextMaxLength: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.FREETEXT_MAX_LENGTH] || 15,
-                freetextSanitization: ruleset.fields[Config.AIRTABLE.FIELDS.RULESETS.FREETEXT_SANITIZATION],
-                raw: ruleset.fields
-            };
         } catch (error) {
-            console.error('Failed to fetch promocode ruleset:', error);
-            // Return default ruleset if fetch fails
-            return {
-                separator: '-',
-                casing: 'UPPER',
-                periodMap: Config.PROMOCODE.PERIODS,
-                termMap: Config.PROMOCODE.TERMS,
-                priceTypeMap: Config.PROMOCODE.DISCOUNT_TYPES,
-                freetextMaxLength: 15
-            };
+            console.log('📋 No Rulesets table or error fetching, using defaults');
         }
-    }
-
-    /**
-     * Fetch promocode code types vocabulary
-     */
-    async fetchCodeTypes() {
-        try {
-            const filterFormula = `{Active} = TRUE()`;
-            
-            const records = await this.fetchData(Config.AIRTABLE.TABLES.VOCAB_CODE_TYPES, {
-                filterByFormula: filterFormula
-            });
-            
-            return records.map(record => ({
-                code: record.fields['Code'],
-                label: record.fields['Label'],
-                active: record.fields['Active'],
-                raw: record.fields
-            }));
-        } catch (error) {
-            console.error('Failed to fetch code types:', error);
-            // Return default code types if fetch fails
-            return Config.PROMOCODE.CODE_TYPES.map(code => ({
-                code: code,
-                label: code
-            }));
-        }
+        
+        // Return default ruleset
+        return {
+            separator: '-',
+            casing: 'UPPER',
+            periodMap: Config.PROMOCODE.PERIODS,
+            termMap: Config.PROMOCODE.TERMS,
+            priceTypeMap: Config.PROMOCODE.DISCOUNT_TYPES,
+            freetextMaxLength: 15,
+            initialOfferRegex: '^(\\d+)([MUQY])(\\d+)([KP])$',
+            renewalPlanRegex: '^([MQYU])(\\d+)$'
+        };
     }
 }
 
